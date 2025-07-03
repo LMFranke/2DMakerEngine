@@ -12,6 +12,7 @@ public class MouseHandler extends MouseAdapter implements MouseMotionListener {
     public boolean isClicked = false;
     public boolean isRightClicked = false;
     public boolean isZoom = false;
+    public boolean isWheelMoved = false;
     public int x = 0;
     public int y = 0;
     public int zoomX = 0;
@@ -78,6 +79,7 @@ public class MouseHandler extends MouseAdapter implements MouseMotionListener {
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         super.mouseWheelMoved(e);
+        isWheelMoved = true;
         if (e.getWheelRotation() < 0) {
             isZoom = true;
             zoomX = e.getX();

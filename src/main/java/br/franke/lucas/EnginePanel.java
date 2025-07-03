@@ -59,9 +59,6 @@ public class EnginePanel extends JPanel implements Runnable {
     public static int zoomX = centerMapX;
     public static int zoomY = centerMapY;
 
-    private int selectionTileX;
-    private int selectionTileY;
-
     private int selectedTileX;
     private int selectedTileY;
     private int hoverTileX;
@@ -77,8 +74,8 @@ public class EnginePanel extends JPanel implements Runnable {
     private int selectedVariantTilePickerX;
     private int selectedVariantTilePickerY;
 
-    private int startXPickerVariant = leftPadding;
-    private int startYPickerVariant = topPadding * 2 + maxWorldRow * tileSquare;
+    private final int startXPickerVariant = leftPadding;
+    private final int startYPickerVariant = topPadding * 2 + maxWorldRow * tileSquare;
 
     private final TileManager tileManager;
     private final MouseHandler mouseHandler;
@@ -171,12 +168,16 @@ public class EnginePanel extends JPanel implements Runnable {
             hoverTileY = row * tileSquare;
         }
 
-        if (mouseHandler.isZoom) {
-            zoomX = mouseHandler.zoomX;
-            zoomY = mouseHandler.zoomY;
-            tileSquare = tileSquareZoom;
-        } else {
-            tileSquare = realTileSquare;
+        if (mouseHandler.isWheelMoved) {
+            selectedTile = null;
+            if (mouseHandler.isZoom) {
+                zoomX = mouseHandler.zoomX;
+                zoomY = mouseHandler.zoomY;
+                tileSquare = tileSquareZoom;
+            } else {
+                tileSquare = realTileSquare;
+            }
+            mouseHandler.isWheelMoved = false;
         }
 
     }
@@ -193,10 +194,6 @@ public class EnginePanel extends JPanel implements Runnable {
         }
 
         if (selectedTile != null && selectedTilePicker == null) {
-            int handleX = 0;
-            if (mouseHandler.isZoom) {
-                handleX = selectedTileX ;
-            }
             drawSelection(selectedTileX + leftPadding, selectedTileY + topPadding, g2d, tileSquare, 2);
         }
 
