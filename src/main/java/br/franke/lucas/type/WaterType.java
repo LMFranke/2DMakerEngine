@@ -1,0 +1,18 @@
+package br.franke.lucas.type;
+
+public enum WaterType {
+    MIDDLE_WATER,
+    MIDDLE_WATER_DETAILED,
+    RIGHT_TO_BOTTOM_WATER,
+    TOP_WATER,
+    LEFT_TO_BOTTOM_WATER,
+    LEFT_WATER,
+    RIGHT_WATER,
+    RIGHT_TO_UP_WATER,
+    BOTTOM_WATER,
+    LEFT_TO_UP_WATER,
+    CORNER_RIGHT_UP,
+    CORNER_LEFT_UP,
+    CORNER_LEFT_BOTTOM,
+    CORNER_RIGHT_BOTTOM,
+}
