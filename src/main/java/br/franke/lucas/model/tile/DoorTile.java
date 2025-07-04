@@ -1,6 +1,7 @@
 package br.franke.lucas.model.tile;
 
 import br.franke.lucas.model.InteractiveTile;
+import br.franke.lucas.model.Tile;
 import br.franke.lucas.type.Direction;
 import br.franke.lucas.type.DoorType;
 
@@ -46,6 +47,14 @@ public class DoorTile extends InteractiveTile {
             }
         }
         super.loadImage();
+    }
+
+    @Override
+    public Tile clone() {
+        DoorTile clone = new DoorTile(doorType, direction);
+        clone.setRow(this.getRow());
+        clone.setCol(this.getCol());
+        return clone;
     }
 
     @Override

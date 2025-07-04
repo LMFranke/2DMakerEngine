@@ -16,6 +16,14 @@ public class FloorTile extends Tile {
     }
 
     @Override
+    public Tile clone() {
+        FloorTile clone = new FloorTile();
+        clone.setRow(this.getRow());
+        clone.setCol(this.getCol());
+        return clone;
+    }
+
+    @Override
     public String toString() {
         return getClass().getSimpleName() + super.toString();
     }

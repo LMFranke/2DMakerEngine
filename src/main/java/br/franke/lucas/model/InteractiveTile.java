@@ -2,6 +2,8 @@ package br.franke.lucas.model;
 
 import br.franke.lucas.type.Direction;
 
+import java.awt.image.BufferedImage;
+
 public abstract class InteractiveTile extends Tile {
 
     public void interact() {}
@@ -19,14 +21,17 @@ public abstract class InteractiveTile extends Tile {
 
 
     public void rotate90Clockwise() {
-        int width = getImage().getWidth();
-        int height = getImage().getHeight();
+        int w = getImage().getWidth();
+        int h = getImage().getHeight();
+        BufferedImage rotated = new BufferedImage(h, w, getImage().getType());
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                getImage().setRGB(height - y - 1, y, getImage().getRGB(x, y));
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                rotated.setRGB(y, w - 1 - x, getImage().getRGB(x, y));
             }
         }
+
+        setImage(rotated);
     }
 
 }

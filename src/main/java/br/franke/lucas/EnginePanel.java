@@ -195,7 +195,7 @@ public class EnginePanel extends JPanel implements Runnable {
 
             if (selectedTile instanceof InteractiveTile) {
                 ((InteractiveTile) selectedTile).switchDirection();
-                coolDownKey = 5;
+                coolDownKey = 50;
             }
 
         }
@@ -288,7 +288,7 @@ public class EnginePanel extends JPanel implements Runnable {
         }
 
         if (selectedTilePicker != null) {
-            tileManager.mapTile[row][col] = selectedTilePicker;
+            tileManager.mapTile[row][col] = selectedTilePicker.clone();
         } else {
             selectedTile = tileManager.mapTile[row][col];
         }

@@ -43,6 +43,14 @@ public class WaterTile extends Tile {
     }
 
     @Override
+    public Tile clone() {
+        WaterTile clone = new WaterTile(waterType);
+        clone.setRow(this.getRow());
+        clone.setCol(this.getCol());
+        return clone;
+    }
+
+    @Override
     public String toString() {
         return getClass().getSimpleName() + super.toString();
     }

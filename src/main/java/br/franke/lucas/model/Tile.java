@@ -76,4 +76,9 @@ public class Tile implements Serializable {
                 ", row=" + row +
                 '}';
     }
+
+    @Override
+    public Tile clone() {
+        return new Tile();
+    }
 }
