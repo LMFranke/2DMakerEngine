@@ -1,6 +1,7 @@
 package br.franke.lucas.model;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Serializable;
@@ -61,6 +62,10 @@ public class Tile implements Serializable {
 
     public void setCol(int col) {
         this.col = col;
+    }
+
+    public void draw(Graphics g, int x, int y, int size) {
+        g.drawImage(image, x, y, size, size, null);
     }
 
     @Override

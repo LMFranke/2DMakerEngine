@@ -1,14 +1,14 @@
 package br.franke.lucas;
 
+import br.franke.lucas.listener.KeyboardHandler;
+import br.franke.lucas.listener.MouseHandler;
+import br.franke.lucas.model.InteractiveTile;
 import br.franke.lucas.model.Tile;
 import br.franke.lucas.model.tile.DoorTile;
 import br.franke.lucas.model.tile.GrassTile;
 import br.franke.lucas.model.tile.RoadTile;
 import br.franke.lucas.model.tile.WaterTile;
-import br.franke.lucas.type.DoorType;
-import br.franke.lucas.type.GrassType;
-import br.franke.lucas.type.RoadType;
-import br.franke.lucas.type.WaterType;
+import br.franke.lucas.type.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -79,12 +79,17 @@ public class EnginePanel extends JPanel implements Runnable {
 
     private final TileManager tileManager;
     private final MouseHandler mouseHandler;
+    private final KeyboardHandler keyboardHandler;
+
+    private double coolDownClick = 0.0;
+    private double coolDownKey = 0.0;
 
     private final JButton saveButton;
 
     public EnginePanel() {
         this.tileManager = new TileManager();
         this.mouseHandler = new MouseHandler();
+        this.keyboardHandler = new KeyboardHandler();
         this.variantsPicker = new Tile[]{new Tile()};
 
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -98,6 +103,7 @@ public class EnginePanel extends JPanel implements Runnable {
         addMouseListener(mouseHandler);
         addMouseMotionListener(mouseHandler);
         addMouseWheelListener(mouseHandler);
+        addKeyListener(keyboardHandler);
         addButtonListeners();
     }
 
@@ -126,14 +132,19 @@ public class EnginePanel extends JPanel implements Runnable {
         }
     }
 
-    double coolDownClick = 0.0;
-
     private void update(double deltaTime) {
 
         if (coolDownClick > 0) {
             coolDownClick -= deltaTime;
             if (coolDownClick < 0) {
                 coolDownClick = 0;
+            }
+        }
+
+        if (coolDownKey > 0) {
+            coolDownKey -= deltaTime;
+            if (coolDownKey < 0) {
+                coolDownKey = 0;
             }
         }
 
@@ -178,6 +189,15 @@ public class EnginePanel extends JPanel implements Runnable {
                 tileSquare = realTileSquare;
             }
             mouseHandler.isWheelMoved = false;
+        }
+
+        if (coolDownKey == 0 && selectedTile != null && keyboardHandler.isRPressed) {
+
+            if (selectedTile instanceof InteractiveTile) {
+                ((InteractiveTile) selectedTile).switchDirection();
+                coolDownKey = 5;
+            }
+
         }
 
     }
@@ -252,8 +272,16 @@ public class EnginePanel extends JPanel implements Runnable {
     }
 
     private void insertTile(int col, int row) {
-        selectedTileX = col * tileSquare;
-        selectedTileY = row * tileSquare;
+
+        if (!mouseHandler.isZoom) {
+            selectedTileX = col * tileSquare;
+            selectedTileY = row * tileSquare;
+        } else {
+            int handleX = zoomX / tileSquare;
+            int handleY = zoomY / tileSquare;
+
+            System.out.println(handleX + " " + handleY);
+        }
 
         if (col >= maxWorldCol || col < 0 || row >= maxWorldRow || row < 0) {
             return;

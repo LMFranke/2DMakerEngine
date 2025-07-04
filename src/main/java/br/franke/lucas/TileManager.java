@@ -14,8 +14,9 @@ import java.util.List;
 
 public class TileManager {
 
-    Tile[][] mapTile;
-    List<Tile> tileList;
+    public Tile[][] mapTile;
+    public List<Tile> tileList;
+    public Tile centerTileOfZoom;
 
     public TileManager() {
         mapTile = new Tile[EnginePanel.maxWorldRow][EnginePanel.maxWorldRow];
@@ -37,7 +38,7 @@ public class TileManager {
             for (int j = 0; j < EnginePanel.maxWorldCol; j++) {
                 int worldX = j * EnginePanel.realTileSquare + EnginePanel.leftPadding;
                 int worldY = i * EnginePanel.realTileSquare + EnginePanel.topPadding;
-                g.drawImage(mapTile[i][j].getImage(), worldX, worldY, EnginePanel.realTileSquare, EnginePanel.realTileSquare, null);
+                mapTile[i][j].draw(g, worldX, worldY, EnginePanel.realTileSquare);
             }
         }
     }
@@ -71,14 +72,21 @@ public class TileManager {
 
         int col = (int) dCol;
         int row = (int) dRow;
+        int counter = 0;
 
-        for (int i = row, counterRow = 0; i < EnginePanel.maxWorldRow && i < row + 25; i++, counterRow++) {
-            for (int j = col, counterCol = 0; j < EnginePanel.maxWorldCol && j < col + 25; j++, counterCol++) {
+        for (int i = row; i < EnginePanel.maxWorldRow && i < row + 25; i++) {
+            for (int j = col; j < EnginePanel.maxWorldCol && j < col + 25; j++, counter++) {
+
+                if (counter == 24) {
+                    centerTileOfZoom = mapTile[i][j];
+                    System.out.println("Row: " + centerTileOfZoom.getRow());
+                    System.out.println("Col: " + centerTileOfZoom.getCol());
+                }
 
                 int imageX = (j - col) * EnginePanel.tileSquareZoom + EnginePanel.leftPadding;
                 int imageY = (i - row) * EnginePanel.tileSquareZoom + EnginePanel.topPadding;
 
-                g.drawImage(mapTile[i][j].getImage(), imageX, imageY, EnginePanel.tileSquareZoom, EnginePanel.tileSquareZoom, null);
+                mapTile[i][j].draw(g, imageX, imageY, EnginePanel.tileSquareZoom);
             }
         }
 
@@ -111,6 +119,8 @@ public class TileManager {
                     mapTile[i][j] = new GrassTile(GrassType.NORMAL);
                 } else {
                     mapTile[i][j].loadImage();
+                    mapTile[i][j].setRow(i);
+                    mapTile[i][j].setCol(j);
                 }
             }
         }

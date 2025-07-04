@@ -1,6 +1,7 @@
 package br.franke.lucas.model.tile;
 
 import br.franke.lucas.model.InteractiveTile;
+import br.franke.lucas.type.Direction;
 import br.franke.lucas.type.DoorType;
 
 public class DoorTile extends InteractiveTile {
@@ -10,6 +11,13 @@ public class DoorTile extends InteractiveTile {
 
     public DoorTile(DoorType doorType) {
         this.doorType = doorType;
+        this.direction = Direction.NORTH;
+        loadImage();
+    }
+
+    public DoorTile(DoorType doorType, Direction direction) {
+        this.doorType = doorType;
+        this.direction = direction;
         loadImage();
     }
 

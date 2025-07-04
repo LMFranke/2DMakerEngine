@@ -1,4 +1,6 @@
-package br.franke.lucas;
+package br.franke.lucas.listener;
+
+import br.franke.lucas.EnginePanel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -59,8 +61,7 @@ public class MouseHandler extends MouseAdapter implements MouseMotionListener {
     @Override
     public void mouseMoved(MouseEvent e) {
         super.mouseMoved(e);
-        if (e.getX() > EnginePanel.leftPadding && e.getX() < EnginePanel.maxWorldCol * EnginePanel.tileSquare + EnginePanel.leftPadding
-                && e.getY() > EnginePanel.topPadding && e.getY() < EnginePanel.maxWorldRow * EnginePanel.tileSquare + EnginePanel.topPadding) {
+        if (e.getX() > EnginePanel.startMapX && e.getX() < EnginePanel.endMapX && e.getY() > EnginePanel.startMapY && e.getY() < EnginePanel.endMapY) {
             isMouseOnTheArea = true;
             x = e.getX();
             y = e.getY();
