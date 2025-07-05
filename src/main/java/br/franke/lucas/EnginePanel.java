@@ -153,15 +153,15 @@ public class EnginePanel extends JPanel implements Runnable {
 
         if (coolDownClick == 0) {
             if (mouseHandler.isClicked && mouseHandler.isMouseOnTheArea) {
-                insertTile(col, row);
+                clickOnTile(col, row);
                 coolDownClick = 0.2;
             }
 
             if (mouseHandler.isClickedOutside) {
                 if (mouseHandler.y < startYPickerVariant) {
-                    foundSelectedTile();
+                    foundSelectedPickerTile();
                 } else {
-                    foundSelectedVariantTile();
+                    foundSelectedVariantPickerTile();
                 }
                 coolDownClick = 10;
             }
@@ -271,16 +271,20 @@ public class EnginePanel extends JPanel implements Runnable {
         }
     }
 
-    private void insertTile(int col, int row) {
+    private void clickOnTile(int col, int row) {
 
-        if (!mouseHandler.isZoom) {
-            selectedTileX = col * tileSquare;
-            selectedTileY = row * tileSquare;
-        } else {
-            int handleX = zoomX / tileSquare;
-            int handleY = zoomY / tileSquare;
+        selectedTileX = col * tileSquare;
+        selectedTileY = row * tileSquare;
 
-            System.out.println(handleX + " " + handleY);
+        if (mouseHandler.isZoom) {
+            int tileCol = (mouseHandler.x - leftPadding) / tileSquareZoom;
+            int tileRow = (mouseHandler.y - topPadding) / tileSquareZoom;
+
+            selectedTileX = col * tileSquareZoom;
+            selectedTileY = row * tileSquareZoom;
+
+            col = tileManager.mapTileZoom[tileRow][tileCol].getCol();
+            row = tileManager.mapTileZoom[tileRow][tileCol].getRow();
         }
 
         if (col >= maxWorldCol || col < 0 || row >= maxWorldRow || row < 0) {
@@ -294,7 +298,7 @@ public class EnginePanel extends JPanel implements Runnable {
         }
     }
 
-    private void foundSelectedTile() {
+    private void foundSelectedPickerTile() {
         int pickerCol = (mouseHandler.x - startXPicker) / tileSquarePicker;
         int pickerRow = (mouseHandler.y - startYPicker) / tileSquarePicker;
 
@@ -316,7 +320,7 @@ public class EnginePanel extends JPanel implements Runnable {
         }
     }
 
-    private void foundSelectedVariantTile() {
+    private void foundSelectedVariantPickerTile() {
         int pickerCol = (mouseHandler.x - startXPickerVariant) / tileSquarePicker;
 
         if (pickerCol > 8) {

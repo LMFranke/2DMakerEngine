@@ -15,11 +15,13 @@ import java.util.List;
 public class TileManager {
 
     public Tile[][] mapTile;
+    public Tile[][] mapTileZoom;
     public List<Tile> tileList;
     public Tile centerTileOfZoom;
 
     public TileManager() {
-        mapTile = new Tile[EnginePanel.maxWorldRow][EnginePanel.maxWorldRow];
+        mapTile = new Tile[EnginePanel.maxWorldRow][EnginePanel.maxWorldCol];
+        mapTileZoom = new Tile[EnginePanel.maxWorldRow / EnginePanel.scaleOfZoom][EnginePanel.maxWorldCol /  EnginePanel.scaleOfZoom];
         tileList = new ArrayList<>();
         loadDefaultList();
         loadMap("src/main/resources/map/map.data");
@@ -74,20 +76,27 @@ public class TileManager {
         int row = (int) dRow;
         int counter = 0;
 
-        for (int i = row; i < EnginePanel.maxWorldRow && i < row + 25; i++) {
-            for (int j = col; j < EnginePanel.maxWorldCol && j < col + 25; j++, counter++) {
+        int maxRowZoom = EnginePanel.maxWorldRow / EnginePanel.scaleOfZoom;
+        int maxColZoom = EnginePanel.maxWorldCol / EnginePanel.scaleOfZoom;
 
-                if (counter == 24) {
+        int indexX = 0;
+        int indexY = 0;
+
+        for (int i = row; i < EnginePanel.maxWorldRow && i < row + maxRowZoom; i++, indexY++) {
+            for (int j = col; j < EnginePanel.maxWorldCol && j < col + maxColZoom; j++, counter++, indexX++) {
+
+                if (counter == maxRowZoom * maxColZoom / 2) {
                     centerTileOfZoom = mapTile[i][j];
-                    System.out.println("Row: " + centerTileOfZoom.getRow());
-                    System.out.println("Col: " + centerTileOfZoom.getCol());
                 }
+
+                mapTileZoom[indexY][indexX] = mapTile[i][j];
 
                 int imageX = (j - col) * EnginePanel.tileSquareZoom + EnginePanel.leftPadding;
                 int imageY = (i - row) * EnginePanel.tileSquareZoom + EnginePanel.topPadding;
 
                 mapTile[i][j].draw(g, imageX, imageY, EnginePanel.tileSquareZoom);
             }
+            indexX = 0;
         }
 
     }
@@ -117,6 +126,8 @@ public class TileManager {
             for (int j = 0; j < mapTile[i].length; j++) {
                 if (isMapEmpty) {
                     mapTile[i][j] = new GrassTile(GrassType.NORMAL);
+                    mapTile[i][j].setRow(i);
+                    mapTile[i][j].setCol(j);
                 } else {
                     mapTile[i][j].loadImage();
                     mapTile[i][j].setRow(i);
