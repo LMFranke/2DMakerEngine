@@ -79,15 +79,8 @@ public class TileManager {
         int maxRowZoom = EnginePanel.maxWorldRow / EnginePanel.scaleOfZoom;
         int maxColZoom = EnginePanel.maxWorldCol / EnginePanel.scaleOfZoom;
 
-        int indexX = 0;
-        int indexY = 0;
-
-        for (int i = row; i < EnginePanel.maxWorldRow && i < row + maxRowZoom; i++, indexY++) {
-            for (int j = col; j < EnginePanel.maxWorldCol && j < col + maxColZoom; j++, counter++, indexX++) {
-
-                if (counter == maxRowZoom * maxColZoom / 2) {
-                    centerTileOfZoom = mapTile[i][j];
-                }
+        for (int i = row, indexY = 0; indexY < maxRowZoom; i++, indexY++) {
+            for (int j = col, indexX = 0; indexX < maxColZoom; j++, counter++, indexX++) {
 
                 mapTileZoom[indexY][indexX] = mapTile[i][j];
 
@@ -96,7 +89,6 @@ public class TileManager {
 
                 mapTile[i][j].draw(g, imageX, imageY, EnginePanel.tileSquareZoom);
             }
-            indexX = 0;
         }
 
     }
@@ -126,13 +118,11 @@ public class TileManager {
             for (int j = 0; j < mapTile[i].length; j++) {
                 if (isMapEmpty) {
                     mapTile[i][j] = new GrassTile(GrassType.NORMAL);
-                    mapTile[i][j].setRow(i);
-                    mapTile[i][j].setCol(j);
                 } else {
                     mapTile[i][j].loadImage();
-                    mapTile[i][j].setRow(i);
-                    mapTile[i][j].setCol(j);
                 }
+                mapTile[i][j].setRow(i);
+                mapTile[i][j].setCol(j);
             }
         }
 

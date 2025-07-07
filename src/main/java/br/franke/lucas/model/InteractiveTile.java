@@ -9,6 +9,14 @@ public abstract class InteractiveTile extends Tile {
     public void interact() {}
     public Direction direction;
 
+    @Override
+    public void loadImage() {
+        super.loadImage();
+        for (int i = 0; i < direction.ordinal(); i++) {
+            rotate90Clockwise();
+        }
+    }
+
     public void switchDirection() {
         switch (direction) {
             case NORTH -> this.direction = Direction.EAST;
@@ -27,7 +35,7 @@ public abstract class InteractiveTile extends Tile {
 
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
-                rotated.setRGB(y, w - 1 - x, getImage().getRGB(x, y));
+                rotated.setRGB(h - 1 - y, x, getImage().getRGB(x, y));
             }
         }
 

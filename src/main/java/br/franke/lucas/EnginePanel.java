@@ -163,6 +163,7 @@ public class EnginePanel extends JPanel implements Runnable {
                 } else {
                     foundSelectedVariantPickerTile();
                 }
+                selectedTile = null;
                 coolDownClick = 10;
             }
 
@@ -195,7 +196,7 @@ public class EnginePanel extends JPanel implements Runnable {
 
             if (selectedTile instanceof InteractiveTile) {
                 ((InteractiveTile) selectedTile).switchDirection();
-                coolDownKey = 50;
+                coolDownKey = 20;
             }
 
         }
