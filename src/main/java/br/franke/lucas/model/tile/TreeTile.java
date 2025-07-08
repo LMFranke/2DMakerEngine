@@ -16,10 +16,10 @@ public class TreeTile extends Tile {
     }
 
     @Override
-    public Tile clone() {
+    public Tile clone(int row, int col) {
         TreeTile clone = new TreeTile();
-        clone.setRow(this.getRow());
-        clone.setCol(this.getCol());
+        clone.setRow(row);
+        clone.setCol(col);
         return clone;
     }
 

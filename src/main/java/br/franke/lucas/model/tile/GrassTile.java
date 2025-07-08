@@ -23,10 +23,10 @@ public class GrassTile extends Tile {
     }
 
     @Override
-    public Tile clone() {
+    public Tile clone(int row, int col) {
         GrassTile clone = new GrassTile(grassType);
-        clone.setRow(this.getRow());
-        clone.setCol(this.getCol());
+        clone.setRow(row);
+        clone.setCol(col);
         return clone;
     }
 

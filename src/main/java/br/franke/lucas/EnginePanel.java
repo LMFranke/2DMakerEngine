@@ -4,10 +4,7 @@ import br.franke.lucas.listener.KeyboardHandler;
 import br.franke.lucas.listener.MouseHandler;
 import br.franke.lucas.model.InteractiveTile;
 import br.franke.lucas.model.Tile;
-import br.franke.lucas.model.tile.DoorTile;
-import br.franke.lucas.model.tile.GrassTile;
-import br.franke.lucas.model.tile.RoadTile;
-import br.franke.lucas.model.tile.WaterTile;
+import br.franke.lucas.model.tile.*;
 import br.franke.lucas.type.*;
 
 import javax.swing.*;
@@ -90,7 +87,7 @@ public class EnginePanel extends JPanel implements Runnable {
         this.tileManager = new TileManager();
         this.mouseHandler = new MouseHandler();
         this.keyboardHandler = new KeyboardHandler();
-        this.variantsPicker = new Tile[]{new Tile()};
+        this.variantsPicker = new Tile[]{new Tile(0,0)};
 
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setFocusable(true);
@@ -154,7 +151,7 @@ public class EnginePanel extends JPanel implements Runnable {
         if (coolDownClick == 0) {
             if (mouseHandler.isClicked && mouseHandler.isMouseOnTheArea) {
                 clickOnTile(col, row);
-                coolDownClick = 0.2;
+                coolDownClick = 1;
             }
 
             if (mouseHandler.isClickedOutside) {
@@ -163,7 +160,6 @@ public class EnginePanel extends JPanel implements Runnable {
                 } else {
                     foundSelectedVariantPickerTile();
                 }
-                selectedTile = null;
                 coolDownClick = 10;
             }
 
@@ -293,7 +289,7 @@ public class EnginePanel extends JPanel implements Runnable {
         }
 
         if (selectedTilePicker != null) {
-            tileManager.mapTile[row][col] = selectedTilePicker.clone();
+            tileManager.mapTile[row][col] = selectedTilePicker.clone(row, col);
         } else {
             selectedTile = tileManager.mapTile[row][col];
         }

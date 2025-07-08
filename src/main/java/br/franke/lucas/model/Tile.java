@@ -16,6 +16,13 @@ public class Tile implements Serializable {
     private int row;
     private int col;
 
+    public Tile(int col, int row) {
+        this.col = col;
+        this.row = row;
+    }
+
+    public Tile() {}
+
     public void loadImage() {
         try {
             this.image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/image/tiles/" + imagePath + ".png")));
@@ -77,8 +84,7 @@ public class Tile implements Serializable {
                 '}';
     }
 
-    @Override
-    public Tile clone() {
-        return new Tile();
+    public Tile clone(int row, int col) {
+        return new Tile(row, col);
     }
 }

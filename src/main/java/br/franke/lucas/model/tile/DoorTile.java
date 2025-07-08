@@ -50,10 +50,10 @@ public class DoorTile extends InteractiveTile {
     }
 
     @Override
-    public Tile clone() {
+    public Tile clone(int row, int col) {
         DoorTile clone = new DoorTile(doorType, direction);
-        clone.setRow(this.getRow());
-        clone.setCol(this.getCol());
+        clone.setRow(row);
+        clone.setCol(col);
         return clone;
     }
 

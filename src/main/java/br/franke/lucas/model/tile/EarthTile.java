@@ -15,10 +15,10 @@ public class EarthTile extends Tile {
     }
 
     @Override
-    public Tile clone() {
+    public Tile clone(int row, int col) {
         EarthTile clone = new EarthTile();
-        clone.setRow(this.getRow());
-        clone.setCol(this.getCol());
+        clone.setRow(row);
+        clone.setCol(col);
         return clone;
     }
 

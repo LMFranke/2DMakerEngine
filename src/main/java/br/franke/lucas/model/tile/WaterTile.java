@@ -43,10 +43,10 @@ public class WaterTile extends Tile {
     }
 
     @Override
-    public Tile clone() {
+    public Tile clone(int row, int col) {
         WaterTile clone = new WaterTile(waterType);
-        clone.setRow(this.getRow());
-        clone.setCol(this.getCol());
+        clone.setRow(row);
+        clone.setCol(col);
         return clone;
     }
 

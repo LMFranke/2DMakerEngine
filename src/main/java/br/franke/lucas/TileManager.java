@@ -74,13 +74,12 @@ public class TileManager {
 
         int col = (int) dCol;
         int row = (int) dRow;
-        int counter = 0;
 
         int maxRowZoom = EnginePanel.maxWorldRow / EnginePanel.scaleOfZoom;
         int maxColZoom = EnginePanel.maxWorldCol / EnginePanel.scaleOfZoom;
 
         for (int i = row, indexY = 0; indexY < maxRowZoom; i++, indexY++) {
-            for (int j = col, indexX = 0; indexX < maxColZoom; j++, counter++, indexX++) {
+            for (int j = col, indexX = 0; indexX < maxColZoom; j++, indexX++) {
 
                 mapTileZoom[indexY][indexX] = mapTile[i][j];
 
@@ -137,63 +136,6 @@ public class TileManager {
         tileList.add(new TreeTile());
         tileList.add(new FloorTile());
         tileList.add(new DoorTile(DoorType.CLOSED));
-    }
-
-    private Tile foundTileByNumberRepresented(int number) {
-        return switch (number) {
-            case 10 -> new GrassTile(GrassType.NORMAL);
-            case 11 -> new GrassTile(GrassType.GRASSED);
-            case 12 -> new WaterTile(WaterType.MIDDLE_WATER);
-            case 13 -> new WaterTile(WaterType.MIDDLE_WATER_DETAILED);
-            case 14 -> new WaterTile(WaterType.RIGHT_TO_BOTTOM_WATER);
-            case 15 -> new WaterTile(WaterType.TOP_WATER);
-            case 16 -> new WaterTile(WaterType.LEFT_TO_BOTTOM_WATER);
-            case 17 -> new WaterTile(WaterType.LEFT_WATER);
-            case 18 -> new WaterTile(WaterType.RIGHT_WATER);
-            case 19 -> new WaterTile(WaterType.RIGHT_TO_UP_WATER);
-            case 20 -> new WaterTile(WaterType.BOTTOM_WATER);
-            case 21 -> new WaterTile(WaterType.LEFT_TO_UP_WATER);
-            case 22 -> new WaterTile(WaterType.CORNER_RIGHT_UP);
-            case 23 -> new WaterTile(WaterType.CORNER_LEFT_UP);
-            case 24 -> new WaterTile(WaterType.CORNER_LEFT_BOTTOM);
-            case 25 -> new WaterTile(WaterType.CORNER_RIGHT_BOTTOM);
-            case 26 -> new RoadTile(RoadType.MIDDLE_ROAD);
-            case 27 -> new RoadTile(RoadType.RIGHT_TO_DOWN_CURVE_ROAD);
-            case 28 -> new RoadTile(RoadType.BOTTOM_ROAD);
-            case 29 -> new RoadTile(RoadType.LEFT_TO_DOWN_CURVE_ROAD);
-            case 30 -> new RoadTile(RoadType.RIGHT_ROAD);
-            case 31 -> new RoadTile(RoadType.LEFT_ROAD);
-            case 32 -> new RoadTile(RoadType.RIGHT_TO_UP_CURVE_ROAD);
-            case 33 -> new RoadTile(RoadType.TOP_ROAD);
-            case 34 -> new RoadTile(RoadType.LEFT_TO_UP_CURVE_ROAD);
-            case 35 -> new RoadTile(RoadType.CORNER_TOP_LEFT_ROAD);
-            case 36 -> new RoadTile(RoadType.CORNER_TOP_RIGHT_ROAD);
-            case 37 -> new RoadTile(RoadType.CORNER_BOTTOM_LEFT_ROAD);
-            case 38 -> new RoadTile(RoadType.CORNER_BOTTOM_RIGHT_ROAD);
-            case 39 -> new EarthTile();
-            case 40 -> new WallTile();
-            case 41 -> new TreeTile();
-            case 42 -> new Tile();
-            case 43 -> new Tile();
-            case 44 -> new Tile();
-            case 45 -> new Tile();
-            case 46 -> new Tile();
-            case 47 -> new Tile();
-            case 48 -> new Tile();
-            case 49 -> new Tile();
-            case 50 -> new FloorTile();
-            case 51 -> new Tile();
-            case 52 -> new Tile();
-            case 53 -> new DoorTile(DoorType.CLOSED);
-            case 54 -> new Tile();
-            case 55 -> new Tile();
-            case 56 -> new Tile();
-            case 57 -> new Tile();
-            case 58 -> new Tile();
-            case 59 -> new Tile();
-            case 60 -> new Tile();
-            default -> null;
-        };
     }
 
 }
