@@ -12,6 +12,13 @@ public class RoadTile extends Tile {
         loadImage();
     }
 
+    public RoadTile(RoadType roadType, int row, int col) {
+        this.roadType = roadType;
+        this.setRow(row);
+        this.setCol(col);
+        loadImage();
+    }
+
     public RoadType getRoadType() {
         return roadType;
     }
@@ -42,6 +49,13 @@ public class RoadTile extends Tile {
 
     @Override
     public Tile clone(int row, int col) {
+        RoadTile clone = new RoadTile(roadType);
+        clone.setRow(row);
+        clone.setCol(col);
+        return clone;
+    }
+
+    public Tile clone(int row, int col, RoadType roadType) {
         RoadTile clone = new RoadTile(roadType);
         clone.setRow(row);
         clone.setCol(col);

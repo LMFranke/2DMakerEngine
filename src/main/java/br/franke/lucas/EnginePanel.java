@@ -9,6 +9,8 @@ import br.franke.lucas.type.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 public class EnginePanel extends JPanel implements Runnable {
@@ -80,6 +82,7 @@ public class EnginePanel extends JPanel implements Runnable {
 
     private double coolDownClick = 0.0;
     private double coolDownKey = 0.0;
+    private boolean isAutomaticRoad = false;
 
     private final JButton saveButton;
 
@@ -87,7 +90,7 @@ public class EnginePanel extends JPanel implements Runnable {
         this.tileManager = new TileManager();
         this.mouseHandler = new MouseHandler();
         this.keyboardHandler = new KeyboardHandler();
-        this.variantsPicker = new Tile[]{new Tile(0,0)};
+        this.variantsPicker = new Tile[]{new Tile(0, 0)};
 
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setFocusable(true);
@@ -197,6 +200,12 @@ public class EnginePanel extends JPanel implements Runnable {
 
         }
 
+        if (coolDownKey == 0 && keyboardHandler.isMPressed) {
+            isAutomaticRoad = !isAutomaticRoad;
+            System.out.println(isAutomaticRoad);
+            coolDownKey = 20;
+        }
+
     }
 
     @Override
@@ -289,10 +298,137 @@ public class EnginePanel extends JPanel implements Runnable {
         }
 
         if (selectedTilePicker != null) {
+
+            if (selectedTilePicker.getImagePath().equals(tileManager.mapTile[row][col].getImagePath())) {
+                return;
+            }
+
             tileManager.mapTile[row][col] = selectedTilePicker.clone(row, col);
+            if (isAutomaticRoad && selectedTilePicker instanceof RoadTile && ((RoadTile) selectedTilePicker).getRoadType() == RoadType.MIDDLE_ROAD) {
+                automaticRoad(row, col);
+            }
         } else {
             selectedTile = tileManager.mapTile[row][col];
         }
+    }
+
+    private void automaticRoad(int row, int col) {
+
+        if (fillAroundIfIsAlone(row, col)) {
+            return;
+        }
+
+        List<RoadTile> addList = new ArrayList<>();
+
+        if (!(tileManager.mapTile[row - 1][col - 1] instanceof RoadTile)) {
+            addList.add(new RoadTile(RoadType.CORNER_TOP_LEFT_ROAD, row - 1, col - 1));
+        } else if (((RoadTile) tileManager.mapTile[row - 1][col - 1]).getRoadType() == RoadType.MIDDLE_ROAD) {
+
+            if (tileManager.mapTile[row][col - 1] instanceof GrassTile) {
+                addList.add(new RoadTile(RoadType.LEFT_TO_DOWN_CURVE_ROAD, row, col - 1));
+            }
+
+        } else if (((RoadTile) tileManager.mapTile[row - 1][col - 1]).getRoadType() == RoadType.LEFT_ROAD) {
+            addList.add(new RoadTile(RoadType.LEFT_ROAD, row, col - 1));
+        }
+//-----------------
+
+        if (!(tileManager.mapTile[row - 1][col] instanceof RoadTile)) {
+            addList.add(new RoadTile(RoadType.TOP_ROAD, row - 1, col));
+        } else if (((RoadTile) tileManager.mapTile[row - 1][col]).getRoadType() == RoadType.LEFT_ROAD
+                || ((RoadTile) tileManager.mapTile[row - 1][col]).getRoadType() == RoadType.RIGHT_TO_DOWN_CURVE_ROAD) {
+            addList.add(new RoadTile(RoadType.LEFT_TO_UP_CURVE_ROAD, row - 1, col));
+        } else if (((RoadTile) tileManager.mapTile[row - 1][col]).getRoadType() == RoadType.RIGHT_ROAD
+                || ((RoadTile) tileManager.mapTile[row - 1][col]).getRoadType() == RoadType.LEFT_TO_DOWN_CURVE_ROAD) {
+            addList.add(new RoadTile(RoadType.RIGHT_TO_UP_CURVE_ROAD, row - 1, col));
+        }
+//-----------------
+
+        if (!(tileManager.mapTile[row - 1][col + 1] instanceof RoadTile)) {
+            addList.add(new RoadTile(RoadType.CORNER_TOP_RIGHT_ROAD, row - 1, col + 1));
+        } else if (((RoadTile) tileManager.mapTile[row - 1][col + 1]).getRoadType() == RoadType.MIDDLE_ROAD) {
+
+            if (tileManager.mapTile[row][col + 1] instanceof GrassTile) {
+                addList.add(new RoadTile(RoadType.RIGHT_TO_DOWN_CURVE_ROAD, row, col + 1));
+            }
+
+        } else if (((RoadTile) tileManager.mapTile[row - 1][col + 1]).getRoadType() == RoadType.RIGHT_ROAD) {
+            addList.add(new RoadTile(RoadType.RIGHT_ROAD, row, col + 1));
+        }
+//-----------------
+
+        if (!(tileManager.mapTile[row][col - 1] instanceof RoadTile)) {
+            addList.add(new RoadTile(RoadType.LEFT_ROAD, row, col - 1));
+        } else if (((RoadTile) tileManager.mapTile[row][col - 1]).getRoadType() == RoadType.TOP_ROAD) {
+            addList.add(new RoadTile(RoadType.LEFT_TO_UP_CURVE_ROAD, row, col - 1));
+        } else if (((RoadTile) tileManager.mapTile[row][col - 1]).getRoadType() == RoadType.BOTTOM_ROAD) {
+            addList.add(new RoadTile(RoadType.LEFT_TO_DOWN_CURVE_ROAD, row, col - 1));
+        }
+//-----------------
+
+        if (!(tileManager.mapTile[row][col + 1] instanceof RoadTile)) {
+            addList.add(new RoadTile(RoadType.RIGHT_ROAD, row, col + 1));
+        } else if (((RoadTile) tileManager.mapTile[row][col + 1]).getRoadType() == RoadType.TOP_ROAD) {
+            addList.add(new RoadTile(RoadType.RIGHT_TO_UP_CURVE_ROAD, row, col + 1));
+        } else if (((RoadTile) tileManager.mapTile[row][col + 1]).getRoadType() == RoadType.BOTTOM_ROAD) {
+            addList.add(new RoadTile(RoadType.RIGHT_TO_DOWN_CURVE_ROAD, row, col + 1));
+        }
+//-----------------
+
+        if (!(tileManager.mapTile[row + 1][col - 1] instanceof RoadTile)) {
+            addList.add(new RoadTile(RoadType.CORNER_BOTTOM_LEFT_ROAD, row + 1, col - 1));
+        } else if (((RoadTile) tileManager.mapTile[row + 1][col - 1]).getRoadType() == RoadType.MIDDLE_ROAD) {
+
+            if (tileManager.mapTile[row][col - 1] instanceof GrassTile) {
+                addList.add(new RoadTile(RoadType.LEFT_TO_UP_CURVE_ROAD, row, col - 1));
+            }
+
+        } else if (((RoadTile) tileManager.mapTile[row + 1][col - 1]).getRoadType() == RoadType.LEFT_ROAD) {
+            addList.add(new RoadTile(RoadType.LEFT_ROAD, row, col - 1));
+        }
+
+
+
+        for (Tile tile : addList) {
+            tileManager.mapTile[tile.getRow()][tile.getCol()] = tile;
+        }
+
+    }
+
+    private boolean fillAroundIfIsAlone(int row, int col) {
+        int[][] directions = {
+                {-1, 0}, {1, 0}, {0, -1}, {0, 1},
+                {-1, -1}, {-1, 1}, {1, -1}, {1, 1}
+        };
+
+        boolean isAlone = true;
+
+        for (int[] dir : directions) {
+            int newRow = row + dir[0];
+            int newCol = col + dir[1];
+
+            if (newRow >= 0 && newRow < maxWorldRow && newCol >= 0 && newCol < maxWorldCol) {
+                if (tileManager.mapTile[newRow][newCol] instanceof RoadTile) {
+                    isAlone = false;
+                }
+            }
+        }
+
+        if (isAlone) {
+
+            tileManager.mapTile[row - 1][col - 1] = new RoadTile(RoadType.CORNER_TOP_LEFT_ROAD, row - 1, col - 1);
+            tileManager.mapTile[row - 1][col] = new RoadTile(RoadType.TOP_ROAD, row - 1, col);
+            tileManager.mapTile[row - 1][col + 1] = new RoadTile(RoadType.CORNER_TOP_RIGHT_ROAD, row - 1, col + 1);
+
+            tileManager.mapTile[row][col - 1] = new RoadTile(RoadType.LEFT_ROAD, row, col - 1);
+            tileManager.mapTile[row][col + 1] = new RoadTile(RoadType.RIGHT_ROAD, row, col + 1);
+
+            tileManager.mapTile[row + 1][col - 1] = new RoadTile(RoadType.CORNER_BOTTOM_LEFT_ROAD, row + 1, col - 1);
+            tileManager.mapTile[row + 1][col] = new RoadTile(RoadType.BOTTOM_ROAD, row + 1, col);
+            tileManager.mapTile[row + 1][col + 1] = new RoadTile(RoadType.CORNER_BOTTOM_RIGHT_ROAD, row + 1, col + 1);
+
+        }
+        return isAlone;
     }
 
     private void foundSelectedPickerTile() {
@@ -314,6 +450,7 @@ public class EnginePanel extends JPanel implements Runnable {
             selectedTilePicker = handle.equals(selectedTilePicker) ? null : handle;
 
             selectedVariantTilePicker = null;
+            isAutomaticRoad = false;
         }
     }
 
